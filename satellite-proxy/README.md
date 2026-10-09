@@ -7,3 +7,15 @@ The browser calls `GET /api/satellite-sla?start=YYYY-MM-DD&end=YYYY-MM-DD`. A sc
 ```
 
 Configure the job with `COPERNICUSMARINE_SERVICE_USERNAME` and `COPERNICUSMARINE_SERVICE_PASSWORD`. Keep both runtime-only; never commit or send them to the browser. Until the endpoint is configured, the site shows an explicit unavailable state rather than sample values.
+
+For this static MVP, create an isolated environment once, then run the extractor:
+
+```bash
+rm -rf .venv-satellite
+python -m venv .venv-satellite
+.venv-satellite/bin/python -m pip install --upgrade pip
+.venv-satellite/bin/pip install -r requirements-satellite.txt
+.venv-satellite/bin/python scripts/fetch_satellite_sla.py
+```
+
+It reads the root `.env`, writes `dist/satellite-sla.json`, and the visualization loads that file when the API endpoint is absent. The isolated environment lets pip install a mutually compatible NumPy 2 scientific stack rather than inherit incompatible compiled packages from Anaconda.
