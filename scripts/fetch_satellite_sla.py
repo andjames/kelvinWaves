@@ -14,7 +14,7 @@ from pathlib import Path
 import copernicusmarine
 
 DATASET = "cmems_obs-sl_glo_phy-ssh_nrt_allsat-l4-duacs-0.125deg_P1D"
-START = "2026-09-01T00:00:00"
+START = "2026-08-01T00:00:00"
 POINTS = [
     ("San Diego offshore", 32.50, -118.00),
     ("Los Angeles offshore", 33.75, -118.50),
@@ -79,7 +79,7 @@ def main() -> None:
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "points": rows,
     }
-    output = Path("dist/satellite-sla.json")
+    output = Path("src/data/satellite-sla.json")
     output.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
     print(f"Wrote {len(rows)} satellite point-days to {output}")
 

@@ -1,0 +1,43 @@
+/* Portable conclusion scene: copy this file with matching kelvin-conclusion markup. */
+.kelvin-conclusion {
+  --kelvin-ink: #e8eee7;
+  --kelvin-night: #061019;
+  --kelvin-coral: #f16d61;
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100svh;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: clamp(32px, 10vw, 160px);
+  color: var(--kelvin-ink);
+  background: var(--kelvin-night);
+  border-top: 1px solid rgba(199, 226, 218, .16);
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", Arial, sans-serif;
+}
+.kelvin-conclusion *, .kelvin-conclusion *::before, .kelvin-conclusion *::after { box-sizing: inherit; }
+.kelvin-conclusion__video { position:absolute; z-index:-3; inset:0; width:100%; min-width:100%; height:100%; min-height:100%; object-fit:cover; object-position:center center; background:var(--kelvin-night); filter:grayscale(.25) saturate(.72) contrast(1.12) brightness(.58); }
+.kelvin-conclusion__wash { position:absolute; z-index:-2; inset:0; background:linear-gradient(90deg, rgba(4,20,29,.94), rgba(5,26,36,.72) 48%, rgba(5,26,36,.47)); }
+.kelvin-conclusion__grain { position:absolute; z-index:-1; inset:-50%; width:200%; height:200%; opacity:.19; pointer-events:none; background-image:repeating-radial-gradient(circle at 31% 28%, rgba(239,246,234,.76) 0 1px, transparent 1px 3px), repeating-radial-gradient(circle at 70% 72%, rgba(0,0,0,.7) 0 1px, transparent 1px 4px); background-size:5px 5px, 7px 7px; mix-blend-mode:soft-light; animation:kelvin-conclusion-grain .18s steps(2) infinite; }
+.kelvin-conclusion__content { position:relative; z-index:1; width:min(900px,90vw); text-align:center; }
+.kelvin-conclusion__eyebrow { margin:0 0 15px; color:#83cfc8; font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
+.kelvin-conclusion__heading { max-width:900px; margin:0; color:var(--kelvin-ink); font-family:Georgia, serif; font-size:1.2em; font-weight:300; line-height: 1.4; }
+.kelvin-conclusion__link { position:relative; z-index:1; display:inline-block; margin-top:40px; color:var(--kelvin-coral); font-size:14px; text-align:center; text-decoration:none; white-space:nowrap; }
+.kelvin-conclusion__link:focus-visible { outline:2px solid var(--kelvin-ink); outline-offset:6px; }
+.kelvin-conclusion__sources { position:absolute; z-index:1; right:24px; bottom:18px; left:24px; margin:0; color:rgba(232,238,231,.7); font-size:10px; line-height:1.45; letter-spacing:.01em; text-align:center; }
+.kelvin-conclusion__sources a { color:inherit; text-decoration:underline; text-underline-offset:2px; }
+.kelvin-conclusion__sources a:focus-visible { outline:2px solid var(--kelvin-ink); outline-offset:3px; }
+@keyframes kelvin-conclusion-grain { 0% { transform:translate3d(0,0,0); } 25% { transform:translate3d(-1.5%,1%,0); } 50% { transform:translate3d(1%,-1.5%,0); } 75% { transform:translate3d(1.5%,1.5%,0); } 100% { transform:translate3d(-1%,-1%,0); } }
+@media (prefers-reduced-motion: reduce) { .kelvin-conclusion__grain { animation:none; } }
+@media (max-width:700px) {
+  .kelvin-conclusion { min-height:100svh; padding:32px 22px; }
+  /* Keep the image filling a portrait conclusion frame, centered on the water. */
+  .kelvin-conclusion__video { object-fit:cover; object-position:center center; }
+  .kelvin-conclusion__wash { background:linear-gradient(180deg, rgba(4,20,29,.72), rgba(5,26,36,.64)); }
+  .kelvin-conclusion__content { width:min(100%, 420px); }
+  .kelvin-conclusion__sources { right:18px; bottom:14px; left:18px; font-size:9px; }
+}

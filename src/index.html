@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content=
+  "width=device-width,initial-scale=1.0">
+  <title>Pacific Pulse — California Kelvin Wave Explorer</title>
+  <meta name="description" content=
+  "A current, NOAA-powered view of non-tidal sea-level anomalies along California.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com"
+  crossorigin="">
+  <link href=
+  "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;display=swap"
+  rel="stylesheet">
+  <link rel="stylesheet" href="dashboard/styles.css">
+</head>
+<body>
+  <main>
+    <nav>
+      <a class="wordmark" href="#top"><span></span>PACIFIC PULSE</a>
+      <div class="nav-right">
+        <a href="#method">Method</a><a href="#sources">Data
+        sources</a><span class="live-dot">LIVE NOAA</span>
+      </div>
+    </nav>
+    <section class="hero" id="top">
+      <div class="eyebrow">
+        COASTAL OCEAN OBSERVATORY <i></i> CALIFORNIA
+      </div>
+      <h1>Can we watch a <em>Kelvin wave</em><br>
+      move up the coast?</h1>
+      <p class="lede">A small, transparent test for a northbound
+      non-tidal sea-level signal—using NOAA water-level
+      observations from August 2026 through today.</p>
+      <div class="hero-meta">
+        <div>
+          <b>10</b><span>STATIONS TESTED</span>
+        </div>
+        <div>
+          <b>3H</b><span>PROPAGATION BINS</span>
+        </div>
+        <div>
+          <b>7D</b><span>DEFAULT VIEW</span>
+        </div>
+      </div>
+      <div class="coastline" aria-hidden="true">
+        <svg viewBox="0 0 1200 150" preserveAspectRatio="none">
+        <path d=
+        "M0 77 C80 22,144 120,232 67 S393 110,485 49 S660 120,750 62 S912 119,1015 55 S1135 93,1200 27"
+        fill="none" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+      </div>
+    </section>
+    <section class="dashboard">
+      <div class="dash-head">
+        <div>
+          <div class="eyebrow" id="rangeLabel">
+            SIGNAL FIELD / AUG 2026 — TODAY
+          </div>
+          <h2>Northbound anomaly</h2>
+        </div>
+        <div class="controls">
+          <label>Window <select id="window">
+            <option value="24">
+              24 hours
+            </option>
+            <option value="48" selected>
+              48 hours
+            </option>
+            <option value="72">
+              72 hours
+            </option>
+          </select></label><button id="refresh"><span>↻</span>
+          Refresh NOAA data</button>
+        </div>
+      </div>
+      <div class="viz-layout">
+        <div class="chart-card">
+          <div class="card-top">
+            <span>SEA-LEVEL ANOMALY <b>CM</b></span>
+            <div class="legend">
+              <i class="neg"></i>−12 <i class="zero"></i>0 <i class="pos"></i>+12
+            </div>
+          </div>
+          <div id="heatmap" role="img" aria-label=
+          "Latitude versus time heatmap of California sea level anomalies">
+          </div>
+          <div class="chart-note" id="chartNote">
+            Requesting observed water level and predicted tides
+            from NOAA CO-OPS…
+          </div>
+        </div>
+        <aside class="insight">
+          <div class="status">
+            <span></span><span id="statusText">CONNECTING TO NOAA</span>
+          </div>
+          <h3 id="lag">Testing the<br>
+          <em>coastal lag</em></h3>
+          <p id="finding">The visualization will calculate residual
+          water level after the latest station records arrive.</p>
+          <div class="rule"></div>
+          <dl>
+            <div><dt>Source window</dt><dd id="windowValue">Aug 01–today</dd></div>
+            <div><dt>Method</dt><dd>event lags</dd></div>
+            <div><dt>Stations loaded</dt><dd id="stationCount">0 / 4</dd></div>
+          </dl>
+          <div class="callout">
+            Select an event and inspect correlation, coverage, and sensitivity. Shared timing alone is not proof of propagation.
+          </div>
+        </aside>
+      </div>
+      <div class="scrubber">
+        <span>01 AUG</span><input id="timeSlider" type="range" min=
+        "0" max="37" value="0" aria-label=
+        "Select analysis day"><span>TODAY</span><output id=
+        "timeLabel">—</output>
+      </div>
+    </section>
+    <section class="sources" id="sources">
+      <div>
+        <div class="eyebrow">
+          OPEN DATA, REPRODUCIBLE METHOD
+        </div>
+        <h2>Measured, not modeled.</h2>
+      </div>
+      <p>The main chart calls NOAA’s public CO-OPS API in your
+      browser whenever it loads. Missing or delayed records are
+      surfaced rather than filled in. DART and satellite layers
+      remain deliberately out of scope for this first pass.</p>
+      <div class="source-links">
+        <a href="https://tidesandcurrents.noaa.gov/" target=
+        "_blank" rel="noreferrer">NOAA Tides & Currents
+        <b>↗</b></a><a href="https://www.ndbc.noaa.gov/dart.shtml"
+        target="_blank" rel="noreferrer">NOAA DART Program
+        <b>↗</b></a>
+      </div>
+    </section>
+    <footer>
+      <span>PACIFIC PULSE / CURRENT DATA
+      EXPLORER</span><span>Observational tool · not an operational
+      forecast</span>
+    </footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="dashboard/analysis-core.js"></script>
+  <script src="dashboard/app.js"></script>
+</body>
+</html>

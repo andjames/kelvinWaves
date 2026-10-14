@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A live NOAA tide-gauge scrollytelling prototype." />
+    <title>Can we watch a Kelvin wave move up the coast?</title>
+    <link rel="stylesheet" href="demo/styles.css" />
+  </head>
+  <body class="kelvin-demo-standalone">
+    <div id="kelvin-demo" class="demo-page">
+
+    <svg class="demo-water-fill" id="intro-water-fill" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+      <defs><linearGradient id="intro-water-gradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#267b8d" stop-opacity=".82"/><stop offset=".5" stop-color="#0c5163" stop-opacity=".94"/><stop offset="1" stop-color="#071c26"/></linearGradient></defs>
+      <path id="water-body"></path>
+    </svg>
+    <main>
+      <section class="demo-scene demo-scene--intro">
+        <div class="demo-sticky demo-sticky--intro">
+          <svg id="intro-wave-chart" class="demo-intro-waves" aria-label="Opening view of measured non-tidal residual traces"></svg>
+          <div class="demo-chart-shell demo-chart-shell--intro">
+            <div class="demo-chart-kicker">Non-tidal water level changes, in centimeters</div>
+            <svg id="intro-chart" aria-label="Non-tidal sea-level residuals at California tide gauges"></svg>
+          </div>
+        </div>
+        <article class="demo-story-step demo-step demo-story-step--hero" data-scene="hero">
+          <div class="demo-story-card demo-story-card--hero">
+            <p class="demo-eyebrow">An attempt at a live<i>(-ish)</i> coastal investigation</p>
+            <h1>Can we watch a Kelvin wave move up the California coast?</h1>
+            <p class="demo-deck">NOAA collects tide data along the California coastline. I wanted to see if tide gauges might show <a href="https://en.wikipedia.org/wiki/Kelvin_wave" target=_blank>Kelvin waves</a> moving along the coast.</p>
+            <p class="demo-scroll-hint">Scroll to investigate <span>↓</span></p>
+          </div>
+        </article>
+        <article class="demo-story-step demo-step" data-scene="lines">
+          <div class="demo-story-card">
+            <p class="demo-card-number">Step 01</p>
+            <p>Kelvin waves aren't just another wave. They're disturbances that can travel along coastlines, affecting sea level and sometimes the structure of the water below.</p>
+            <p>Below, each line is an observed water level at a station, minus the tide prediction for that location.</p> 
+            
+            <p class="demo-muted">According to their Wiki, surface-level Kelvins can move very fast. The internal waves (bringing warm water) travel at a slower pace.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="demo-scene">
+        <div class="demo-sticky">
+          <div class="demo-chart-shell demo-chart-shell--calendar">
+            <div class="demo-chart-kicker">What's happening daily?</div>
+            <h3>Residual water levels, by day.</h3>
+            <svg id="calendar-chart" aria-label="Daily non-tidal sea-level residual calendar"></svg>
+          </div>
+        </div>
+        <article class="demo-story-step demo-step" data-scene="calendar">
+          <div class="demo-story-card">
+            <p class="demo-card-number">Step 02</p>
+            <p>Looking at the daily cells in an attempt to make broader shifts up the coast visible.</p>
+            <p class="demo-muted">Color is scaled to the loaded observations. If there's not enough data per day, it shows as "missing" and is dark/empty.</p>
+          </div>
+        </article>
+        <article class="demo-story-step demo-step demo-story-step--detail" data-scene="calendar" data-highlight="calendar-peaks">
+          <div class="demo-story-card demo-story-card--detail">
+            <p class="demo-card-number">Step 02 / A closer read</p>
+            <p>They're ordered by their distance from San Diego moving north.</p>
+            <p>A coordinated sea level change should (maybe) arrive progressively later as it travels north. Similar patterns may suggest it, but we can't assume it.</p>
+            <p class="demo-muted">The next chart gets more granular in 3-hour station measurements around a station's peak water level.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="demo-scene">
+        <div class="demo-sticky">
+          <div class="demo-chart-shell demo-chart-shell--focus">
+            <div class="demo-chart-kicker">Zoom in: Looking closer at coastal candidates</div>
+            <h3>Do the dates line up? Will this show something useful?</h3>
+            <svg id="focus-chart" aria-label="Station strips and timing marks for a candidate residual water level peaks"></svg>
+          </div>
+        </div>
+        <article class="demo-story-step demo-step" data-scene="focus">
+          <div class="demo-story-card">
+            <p class="demo-card-number">Step 03</p>
+            <p class="demo-focus-date">Reading the latest observed days.</p>
+            <p>Each strip is a station's own measurements. The lines identifies a potential candidate peak from the southern reference gauge. The circles highlight the neighboring measured bins with similar heights.</p>
+            <p class="demo-muted">Still not a clear sign of a Kelvin wave.</p>
+          </div>
+        </article>
+        <article class="demo-story-step demo-step demo-story-step--detail" data-scene="focus" data-highlight="focus-alignment">
+          <div class="demo-story-card demo-story-card--detail">
+            <p class="demo-card-number">Step 03 / The question</p>
+            <p>Do similar changes show up farther north later, in a way that suggests they could be related?</p>
+            <p class="demo-muted">The full dashboard keeps the coverage and lag tests alongside this visual check.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="demo-scene">
+        <div class="demo-sticky">
+          <div class="demo-chart-shell demo-chart-shell--satellite">
+            <div class="demo-chart-kicker">Zoom out: Off-shore satellite measures</div>
+            <h3>What changed offshore?</h3>
+            <svg id="satellite-focus-chart" aria-label="Short-term satellite sea-level anomaly change at offshore California points"></svg>
+          </div>
+        </div>
+        <article class="demo-story-step demo-step" data-scene="satellite">
+          <div class="demo-story-card">
+            <p class="demo-card-number">04</p>
+            <p>Copernicus satellite data adds a broader offshore reading. It's mentioned as a more common way to show/find our coastal Kelvin. Each block shows how much higher or lower the satellite-estimated sea level is compared with the average for the area over the previous seven days.</p>
+            <p class="demo-muted">These pull in large 0.125° gridded samples (12-14 km area) and sit further offshore. They're more likely to show changes in sea level of the slower, warm Kelvin. It provides context for better understanding the above coastal gauges (but not a substitute).</p>
+          </div>
+        </article>
+        <article class="demo-story-step demo-step demo-story-step--detail" data-scene="satellite">
+          <div class="demo-story-card demo-story-card--detail">
+            <p class="demo-card-number">04 / An overhead view</p>
+            <p>Similar to above, the satellite rows are offshore grid-cell estimates, not the tide-gauge measurements. I included them to show whether broader sea-level change is visible beyond the coastline.</p>
+  
+          </div>
+        </article>
+      </section>
+
+      <section class="kelvin-conclusion">
+        <video class="kelvin-conclusion__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+          <source src="assets/conclusion-beach.mp4" type="video/mp4" />
+        </video>
+        <div class="kelvin-conclusion__wash" aria-hidden="true"></div>
+        <div class="kelvin-conclusion__grain" aria-hidden="true"></div>
+        <div class="kelvin-conclusion__content">
+          <p class="kelvin-conclusion__eyebrow">Conclusion (so far)</p>
+          <h4 class="kelvin-conclusion__heading">Still looking for a clear signal. What would you try next? Any tips on how to improve detection – Sea Surface Temperature? Other stations? Other data?</h4>
+        </div>
+        <a class="kelvin-conclusion__link" href="index.html">Open the full coastal dashboard →</a>
+        <p class="kelvin-conclusion__sources">Gauge observations and astronomical tide predictions: <a href="https://tidesandcurrents.noaa.gov/" target="_blank" rel="noreferrer">NOAA CO-OPS</a> · Offshore sea-level context: <a href="https://marine.copernicus.eu/" target="_blank" rel="noreferrer">Copernicus Marine Service / DUACS</a></p>
+      </section>
+    </main>
+
+    <div class="demo-loading" role="status"><span></span> Loading NOAA tide-gauge observations</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="demo/data.js"></script>
+    <script src="demo/charts.js"></script>
+    <script src="demo/scroll.js"></script>
+    <script src="demo/demo.js"></script>
+  </body>
+</html>
