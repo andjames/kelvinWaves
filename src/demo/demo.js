@@ -3,6 +3,10 @@
   "use strict";
 
   const API = "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter";
+  // The story can be embedded on a separately hosted blog and still receive
+  // the daily Action-refreshed cache. A same-build local copy remains a
+  // development/offline fallback below.
+  const NOAA_CACHE_URL = "https://raw.githubusercontent.com/andjames/kelvinWaves/main/src/data/demo-noaa-cache.json";
   const START = "20260801";
   const colors = ["#f17866", "#edaa65", "#c8a6e5", "#83cfc8", "#f1d28b", "#94cfc2", "#e192a9", "#74b3ce", "#d9b782", "#b5a3df"];
   const stations = [
@@ -210,9 +214,17 @@
   }
 
   async function loadCachedStations() {
-    const response = await fetch("data/demo-noaa-cache.json", { cache: "no-store" });
-    if (!response.ok) throw new Error("Local NOAA cache is missing");
-    const payload = await response.json();
+    let payload;
+    try {
+      const response = await fetch(NOAA_CACHE_URL, { cache: "no-store" });
+      if (!response.ok) throw new Error(`Remote NOAA cache returned ${response.status}`);
+      payload = await response.json();
+    } catch (remoteError) {
+      console.warn("Remote NOAA cache unavailable; using the bundled cache.", remoteError);
+      const response = await fetch("data/demo-noaa-cache.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("NOAA cache is unavailable");
+      payload = await response.json();
+    }
     return (payload.stations || []).map(cached => {
       const station = stations.find(item => item.id === cached.id) || cached;
       const hours = (cached.hours || []).map(point => ({ time: new Date(point.t), residual: +point.r })).filter(point => Number.isFinite(point.residual));
@@ -635,12 +647,12 @@
     setupCinematicWater();
     setupScroll();
     document.querySelector("#kelvin-demo")?.classList.add("is-scroll-ready");
-    loading.textContent = "Loading local NOAA residual cache";
+    loading.textContent = "Loading NOAA residual cache";
     let gaugeStations;
     try {
       [gaugeStations, satelliteModel] = await Promise.all([loadCachedStations(), loadSatellite()]);
     } catch (error) {
-      loading.textContent = "Local NOAA cache missing. Run: python scripts/fetch_demo_noaa_cache.py";
+      loading.textContent = "NOAA cache unavailable. Run: python scripts/fetch_demo_noaa_cache.py";
       console.error(error);
       return;
     }

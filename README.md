@@ -38,6 +38,8 @@ npm run build
 
 The NOAA cache can also be flattened independently with `npm run data:csv`. Its CSV has one hourly observation per row, ordered by UTC timestamp and coastal distance. The extract scripts write directly to `src/data/`; their results are included in the next static build. Credentials remain in `.env` and are not copied into `dist/`.
 
+The scrollytelling demo prefers the Action-refreshed NOAA JSON on GitHub Raw so an embedded copy can receive daily gauge updates without republishing its host page. It falls back to its bundled `data/demo-noaa-cache.json` during local development or if the remote cache is unavailable.
+
 ## Reusable conclusion scene
 
 `src/components/kelvin-conclusion.css` is a self-contained conclusion component. Its markup uses only `kelvin-conclusion*` classes and it supplies its own layout, typography, video treatment, and grain animation. To reuse it elsewhere, copy that CSS file, the corresponding section markup in `src/demo.html`, and a video asset; update the `<source>` path for the destination project.

@@ -1,4 +1,4 @@
-name: Refresh NOAA coastal data
+name: Refresh coastal data
 
 on:
   schedule:
@@ -8,8 +8,7 @@ on:
   workflow_dispatch:
 
 # Required for the workflow to commit refreshed local cache files back to the
-# default branch. Copernicus data is deliberately excluded until credentials
-# are configured as repository secrets.
+# default branch. Copernicus credentials are exposed only to its fetch step.
 permissions:
   contents: write
 
@@ -40,6 +39,15 @@ jobs:
       - name: Refresh NOAA gauge cache
         run: python3 scripts/fetch_demo_noaa_cache.py
 
+      - name: Install Copernicus Marine client
+        run: python3 -m pip install --disable-pip-version-check -r requirements-satellite.txt
+
+      - name: Refresh Copernicus satellite context
+        env:
+          COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUSMARINE_SERVICE_USERNAME }}
+          COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUSMARINE_SERVICE_PASSWORD }}
+        run: python3 scripts/fetch_satellite_sla.py
+
       - name: Rebuild CSV, static site, and checks
         run: |
           npm run data:csv
@@ -48,7 +56,7 @@ jobs:
 
       - name: Commit refreshed cache if it changed
         run: |
-          git add src/data/demo-noaa-cache.json src/data/demo-noaa-cache.csv dist
+          git add src/data/demo-noaa-cache.json src/data/demo-noaa-cache.csv src/data/satellite-sla.json dist
           if git diff --cached --quiet; then
             echo "NOAA cache is already current; nothing to commit."
             exit 0
