@@ -1,0 +1,59 @@
+name: Refresh NOAA coastal data
+
+on:
+  schedule:
+    # Daily at 16:17 UTC (08:17 PST / 09:17 PDT). Avoid the top of the hour,
+    # when GitHub's scheduled runners are more likely to be delayed.
+    - cron: "17 16 * * *"
+  workflow_dispatch:
+
+# Required for the workflow to commit refreshed local cache files back to the
+# default branch. Copernicus data is deliberately excluded until credentials
+# are configured as repository secrets.
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-noaa-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the default branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Refresh NOAA gauge cache
+        run: python3 scripts/fetch_demo_noaa_cache.py
+
+      - name: Rebuild CSV, static site, and checks
+        run: |
+          npm run data:csv
+          npm run build
+          npm test
+
+      - name: Commit refreshed cache if it changed
+        run: |
+          git add src/data/demo-noaa-cache.json src/data/demo-noaa-cache.csv dist
+          if git diff --cached --quiet; then
+            echo "NOAA cache is already current; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update NOAA coastal data"
+          git push
